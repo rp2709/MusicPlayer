@@ -16,6 +16,8 @@ add_library(SoundBasis
         SoundBasis/Buffer.h
         SoundBasis/Adapter.cpp
         SoundBasis/Adapter.h
+        SoundBasis/FourrierTransform.cpp
+        SoundBasis/FourrierTransform.h
 )
 
 #create SoundDevice lib

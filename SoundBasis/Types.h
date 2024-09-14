@@ -2,6 +2,7 @@
 #define WAVE_PLAYER__TYPES_H_
 
 #include <vector>
+#include <complex>
 
 enum class SampleType{S8,S16,S20,S24};
 using Sample8 = signed char;
@@ -20,5 +21,9 @@ struct Settings{
 
 using Time = double;
 
+using Complex = std::complex<double>;
+using FourrierValues = std::vector<Complex>;
+using RealBuffer = std::vector<double>;
+using Frequency = double;
 
 #endif //WAVE_PLAYER__TYPES_H_
