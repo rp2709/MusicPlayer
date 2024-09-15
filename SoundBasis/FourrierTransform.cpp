@@ -4,7 +4,6 @@ FourrierValues discretFourrierTransform(const RealBuffer& samples, Frequency sam
   const Frequency step = samplingRate/ samples.size(); // equivalent to 1 / duration
   const size_t stepsNb = samples.size() / 2; // equivalent to (samplingRate / 2) / step
   const Complex i(0,1);
-
   const Real scale = 2 * M_PI / (Real)samples.size();
 
   FourrierValues spectrum; spectrum.reserve(stepsNb);
@@ -13,8 +12,7 @@ FourrierValues discretFourrierTransform(const RealBuffer& samples, Frequency sam
     const Frequency testFrequency = (double)fi * step;
     Complex average(0,0);
     for(size_t si = 0; si < samples.size(); ++si){
-      const Real angle = (double)si * (double)fi * scale;
-      average += samples[si] * Complex(std::cos(angle), -std::sin(angle));
+      average += samples[si] * std::exp(-i * scale * (Real)si * (Real)fi);
     }
     average /= (Real)samples.size();
     spectrum.emplace_back(testFrequency,average);
