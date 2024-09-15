@@ -1,37 +1,42 @@
 #include "FourrierTransform.h"
-FourrierTransform::FourrierTransform(const RealBuffer &buffer, Frequency samplingFreq):freqMax(samplingFreq/2),duration(buffer.size()/samplingFreq){
-  step = 1./duration;
 
-  Frequency testFreq = 0;
-  while(testFreq <= freqMax){
-    Complex sum(0,0);
-    const Complex I(0,1);
-    for(unsigned i = 0; i < buffer.size(); ++i){
-      const Time t = i / samplingFreq;
-      sum += (buffer[i]/(double)buffer.size()) * std::exp(-2 * M_PI * I * testFreq * t);
+FourrierValues discretFourrierTransform(const RealBuffer& samples, Frequency samplingRate){
+  const Frequency step = samplingRate/ samples.size(); // equivalent to 1 / duration
+  const size_t stepsNb = samples.size() / 2; // equivalent to (samplingRate / 2) / step
+  const Complex i(0,1);
+
+  const Real scale = 2 * M_PI / (Real)samples.size();
+
+  FourrierValues spectrum; spectrum.reserve(stepsNb);
+
+  for(size_t fi = 0; fi < stepsNb; ++fi){
+    const Frequency testFrequency = (double)fi * step;
+    Complex average(0,0);
+    for(size_t si = 0; si < samples.size(); ++si){
+      const Real angle = (double)si * (double)fi * scale;
+      average += samples[si] * Complex(std::cos(angle), -std::sin(angle));
     }
-    values.push_back(sum);
-    testFreq += step;
+    average /= (Real)samples.size();
+    spectrum.emplace_back(testFrequency,average);
   }
+  return spectrum;
 }
 
-RealBuffer FourrierTransform::reconstruct(Frequency samplingFreq) const {
-  RealBuffer buffer;
-  const Time period = 1/samplingFreq;
+RealBuffer reconstruct(const FourrierValues& spectrum, Frequency samplingRate, Time duration){
+  RealBuffer samples;
+  samples.reserve(samplingRate * duration);
+  const Time period = 1/samplingRate;
 
   Time t = 0;
   while(t < duration){
     double sum = 0;
-    for(unsigned i = 0; i < values.size(); ++i){
-      const Frequency frequency = i * step;
-      const Complex& value = values[i];
-      sum += value.real() * std::sin(2 * M_PI * frequency * t + std::arg(value));
+    for(const FourrierPair& value : spectrum){
+      sum += 2 * value.second.real() * std::cos(2 * M_PI * value.first * t + std::arg(value.second));
     }
-    buffer.push_back(sum);
+    samples.push_back(sum);
     t += period;
   }
 
-  return buffer;
+  return samples;
 }
-
 

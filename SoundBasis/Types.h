@@ -21,9 +21,11 @@ struct Settings{
 
 using Time = double;
 
-using Complex = std::complex<double>;
-using FourrierValues = std::vector<Complex>;
-using RealBuffer = std::vector<double>;
-using Frequency = double;
+using Real = double;
+using Complex = std::complex<Real>;
+using RealBuffer = std::vector<Real>;
+using Frequency = Real;
+using FourrierPair = std::pair<Frequency,Complex>;
+using FourrierValues = std::vector<FourrierPair>;
 
 #endif //WAVE_PLAYER__TYPES_H_
