@@ -50,3 +50,7 @@ target_link_libraries(${PROJECT_NAME} SoundBasis SoundDevice SoundFiles)
 
 #preprocessor definitions
 add_compile_definitions(__LINUX__)
+
+#debug and test target
+add_executable(UnitTests unitTestMain.cpp)
+target_link_libraries(UnitTests SoundBasis)
