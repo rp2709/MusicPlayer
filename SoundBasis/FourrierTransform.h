@@ -3,8 +3,10 @@
 
 #include "Types.h"
 
-FourrierValues discretFourrierTransform(const RealBuffer& samples, Frequency samplingRate);
+Spectrum discretFourrierTransform(const RealBuffer& samples, Frequency samplingRate);
 
-RealBuffer reconstruct(const FourrierValues& spectrum, Frequency samplingRate, Time duration);
+RealBuffer reconstruct(const Spectrum& spectrum, Frequency samplingRate, Time duration);
+
+RealBuffer limitedReconstruct(const Spectrum& spectrum, Frequency samplingRate, Time duration, size_t wavesCount);
 
 #endif //MUSICPLAYER_SOUNDBASIS_FOURRIERTRANSFORM_H_

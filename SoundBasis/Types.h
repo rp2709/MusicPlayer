@@ -25,7 +25,13 @@ using Real = double;
 using Complex = std::complex<Real>;
 using RealBuffer = std::vector<Real>;
 using Frequency = Real;
-using FourrierPair = std::pair<Frequency,Complex>;
-using FourrierValues = std::vector<FourrierPair>;
+
+struct PeriodicWave{
+  Frequency frequency;
+  Real amplitude;
+  Real phase;
+};
+
+using Spectrum = std::vector<PeriodicWave>;
 
 #endif //WAVE_PLAYER__TYPES_H_
