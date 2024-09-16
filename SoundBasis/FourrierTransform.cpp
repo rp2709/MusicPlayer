@@ -6,8 +6,8 @@ FourrierValues discretFourrierTransform(const RealBuffer& samples, Frequency sam
   const Complex i(0,1);
   const Real scale = 2 * M_PI / (Real)samples.size();
 
-  FourrierValues spectrum; spectrum.reserve(stepsNb);
-
+  FourrierValues spectrum(stepsNb);
+#pragma omp parallel for
   for(size_t fi = 0; fi < stepsNb; ++fi){
     const Frequency testFrequency = (double)fi * step;
     Complex average(0,0);
@@ -15,7 +15,7 @@ FourrierValues discretFourrierTransform(const RealBuffer& samples, Frequency sam
       average += samples[si] * std::exp(-i * scale * (Real)si * (Real)fi);
     }
     average /= (Real)samples.size();
-    spectrum.emplace_back(testFrequency,average);
+    spectrum[fi] = {testFrequency,average};
   }
   return spectrum;
 }
