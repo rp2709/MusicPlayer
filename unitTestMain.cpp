@@ -11,36 +11,39 @@ bool compareAmplitude(const PeriodicWave& p1, const PeriodicWave& p2){
 }
 
 int main(){
+  Settings deviceSettings{44100,SampleType::S16,4096,2};
+  PlaybackDevice device(deviceSettings);
 
-  WaveFile wav("speech.wav");
+  WaveFile wav("guitare.wav");
 
   Settings settings = wav.getSuggestedSettings();
-  const Real SR = wav.getSuggestedSettings().rate;
 
+  wav.buffer = S24toS16(wav.buffer);
   wav.buffer = monoToStereo(wav.buffer);
-  settings.channels = 2;
-
-  RealBuffer samples = adapt(wav.buffer,settings);
-  //RealBuffer samples = reconstruct({{50,0.25,0},{98,0.47,1.5}},SR,1);
+  //settings.channels = 2;
 
   //FourrierValues spectrum = extractSpectrum(samples,120);
-  Spectrum spectrum = discretFourrierTransform(samples,SR);
+  /*Spectrum spectrum = extractSpectrum(samples,SR);
 
   std::sort(spectrum.begin(), spectrum.end(), compareAmplitude);
 
-  RealBuffer reconstructedSamples = limitedReconstruct(spectrum,SR,2,1000);
+  RealBuffer reconstructedSamples = limitedReconstruct(spectrum,SR,2,1000);*/
 
-  Buffer buffer = adapt(reconstructedSamples,SR,SampleType::S16);
-
-  buffer = changeSampleRate(buffer,SR,44100);
-
-  PlaybackDevice device({44100,SampleType::S16,4096,2});
+  wav.buffer = changeSampleRate(wav.buffer,settings.rate,deviceSettings.rate);
 
   size_t chunkStart = 0;
-  while(chunkStart < buffer.size()){
+  while(chunkStart < wav.buffer.size()){
+
+    Buffer chunk = wav.buffer.getChunk(chunkStart,deviceSettings.bufferSize);
+
+    RealBuffer rchunk = adapt(chunk,deviceSettings);
+    Spectrum spectrum = FFT::extractSpectrum(rchunk, deviceSettings.rate);
+    std::sort(spectrum.begin(), spectrum.end(), compareAmplitude);
+    std::cout << "Dominant frequency : " << spectrum.front().frequency << " Hz" << std::endl;
+
     while(not device.ready());
-    device.play(buffer.getChunk(chunkStart,4096));
-    chunkStart += 4096;
+    device.play(chunk);
+    chunkStart += deviceSettings.bufferSize;
   }
 
   std::cin.ignore(1);
