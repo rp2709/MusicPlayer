@@ -32,6 +32,7 @@ class CLI_UI {
   //helpers
   void update();
   void processInput();
+  void enter();
  public:
   template<UI_ELEMENTS elementType,typename... Args>
   void addElement(Args&& ...args);

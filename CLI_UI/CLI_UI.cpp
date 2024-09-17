@@ -61,6 +61,7 @@ void CLI_UI::processInput() {
   while (read(STDIN_FILENO, &c, 1) != 0) {
     //quit
     if(c == 'q')quit = true;
+    if(c == 10)enter();
     //process special keys
     if(c == '['){
       char nextC = '\0';
@@ -77,6 +78,17 @@ void CLI_UI::processInput() {
       }
       selectedElement %= drawOrder.size();
     }
+  }
+}
 
+void CLI_UI::enter() {
+  auto[type,index] = drawOrder.at(selectedElement);
+  switch (type) {
+    case UI_ELEMENTS::BAR_GRAPH:
+      break;
+    case UI_ELEMENTS::BUTTON:buttons.at(index).toggle();
+      break;
+    case UI_ELEMENTS::FIELD:
+      break;
   }
 }
