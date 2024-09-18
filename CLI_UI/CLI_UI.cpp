@@ -41,13 +41,13 @@ void CLI_UI::update() {
   for (size_t i = 0; i < drawOrder.size(); ++i) {
     auto[type,index] = drawOrder[i];
     switch (type) {
-      case UI_ELEMENTS::BAR_GRAPH:barGraphs.at(index).update();
-        cout << barGraphs.at(index);
+      case UI_ELEMENTS::BAR_GRAPH:barGraphs.at(index)->update();
+        cout << *(ElementBase*)barGraphs.at(index).get();
         break;
-      case UI_ELEMENTS::BUTTON:cout << buttons.at(index);
+      case UI_ELEMENTS::BUTTON:cout << *(ElementBase*)buttons.at(index).get();
         break;
-      case UI_ELEMENTS::FIELD:fields.at(index).update();
-        cout << fields.at(index);
+      case UI_ELEMENTS::FIELD:fields.at(index)->update();
+        cout << *(ElementBase*)fields.at(index).get();
         break;
     }
     if(i == selectedElement)cout << " <-";
@@ -86,9 +86,21 @@ void CLI_UI::enter() {
   switch (type) {
     case UI_ELEMENTS::BAR_GRAPH:
       break;
-    case UI_ELEMENTS::BUTTON:buttons.at(index).toggle();
+    case UI_ELEMENTS::BUTTON:buttons.at(index)->toggle();
       break;
     case UI_ELEMENTS::FIELD:
       break;
+  }
+}
+
+CLI_UI::~CLI_UI() {
+  for(auto& ptr : fields){
+    delete ptr.get();
+  }
+  for(auto& ptr : buttons){
+    delete ptr.get();
+  }
+  for(auto& ptr : barGraphs){
+    delete ptr.get();
   }
 }

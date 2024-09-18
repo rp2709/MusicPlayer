@@ -8,14 +8,15 @@
 #include <iostream>
 #include <termios.h>
 #include <unistd.h>
+#include <memory>
 
 enum class UI_ELEMENTS { BAR_GRAPH, BUTTON, FIELD };
 
 class CLI_UI {
   //ui elements
-  std::vector<BarGraph> barGraphs;
-  std::vector<Button> buttons;
-  std::vector<ValueField<>> fields;
+  std::vector<std::unique_ptr<BarGraphBase>> barGraphs;
+  std::vector<std::unique_ptr<ButtonBase>> buttons;
+  std::vector<std::unique_ptr<ValueFieldBase>> fields;
 
   //ui draw order
   using ElementIndex = std::pair<UI_ELEMENTS, size_t>;
@@ -34,25 +35,26 @@ class CLI_UI {
   void processInput();
   void enter();
  public:
-  template<UI_ELEMENTS elementType,typename... Args>
-  void addElement(Args&& ...args);
+  template<UI_ELEMENTS elementType,typename ObjectPointer>
+  void addElement(ObjectPointer ptr);
+  ~CLI_UI();
   void run();
 
 };
 
-template<UI_ELEMENTS elementType, typename... Args>
-void CLI_UI::addElement(Args&& ...args) {
+template<UI_ELEMENTS elementType, typename ObjectPointer>
+void CLI_UI::addElement(ObjectPointer ptr) {
   size_t index;
 
   if constexpr (elementType == UI_ELEMENTS::BAR_GRAPH) {
     index = barGraphs.size();
-    barGraphs.emplace_back(std::forward<Args>(args)...);
+    barGraphs.push_back(std::unique_ptr<BarGraphBase>(ptr));
   } else if constexpr (elementType == UI_ELEMENTS::BUTTON) {
     index = buttons.size();
-    buttons.emplace_back(std::forward<Args>(args)...);
+    buttons.push_back(std::unique_ptr<ButtonBase>(ptr));
   } else if constexpr (elementType == UI_ELEMENTS::FIELD) {
     index = fields.size();
-    fields.emplace_back(std::forward<Args>(args)...);
+    fields.push_back(std::unique_ptr<ValueFieldBase>(ptr));
   }
 
   drawOrder.emplace_back(elementType, index);

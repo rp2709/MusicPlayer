@@ -5,36 +5,44 @@
 #include <string>
 #include <ostream>
 
-template<typename T = Real>
-class ValueField {
+class ValueFieldBase : public ElementBase{
+ public:
+  virtual void update() = 0;
+};
+
+template<class C, typename T = Real>
+class ValueField : public ValueFieldBase{
   T value;
   std::string name;
   std::string unit;
 
-  UpdateDataGetter<T> updateGetter;
+  using Method = T(C::*)()const;
+  C& object;
+  Method updateGetter;
+
  public:
-  explicit ValueField(std::string name, UpdateDataGetter<T> updateGetter,std::string unit = "", T initialValue = T(0));
-  void update();
-  template<typename VT>
-  friend std::ostream& operator << (std::ostream & out, const ValueField<VT>& valueField);
+  explicit ValueField(std::string name, C& object, Method updateGetter, std::string unit = "", T initialValue = T(0));
+  void update()override;
+  std::string print()const override;
 };
-
-template<typename T>
-std::ostream &operator<<(std::ostream &out, const ValueField<T> &valueField) {
-  out << valueField.name << " : " << valueField.value << '[' << valueField.unit << ']';
-  return out;
+template<class C, typename T>
+std::string ValueField<C, T>::print()const {
+  std::stringstream out;
+  out << name << " : " << value << '[' << unit << ']';;
+  return out.str();
 }
 
-template<typename T>
-void ValueField<T>::update() {
-  value = updateGetter();
+template<class C,typename T>
+void ValueField<C,T>::update() {
+  value = (object.*updateGetter)();
 }
 
-template<typename T>
-ValueField<T>::ValueField(std::string name,UpdateDataGetter<T> updateGetter, std::string unit, T initialValue):
+template<class C,typename T>
+ValueField<C,T>::ValueField(std::string name, C& object, Method updateGetter, std::string unit, T initialValue):
 name(std::move(name)),
 unit(std::move(unit)),
 value(initialValue),
+object(object),
 updateGetter(updateGetter)
 {}
 

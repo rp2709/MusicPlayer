@@ -50,12 +50,12 @@ target_link_libraries(${PROJECT_NAME} SoundBasis SoundDevice SoundFiles)
 add_library(CLI_UI
         CLI_UI/CLI_UI.cpp
         CLI_UI/CLI_UI.h
-        CLI_UI/BarGraph.cpp
         CLI_UI/BarGraph.h
         CLI_UI/Types.h
-        CLI_UI/Button.cpp
         CLI_UI/Button.h
-        CLI_UI/ValueField.h)
+        CLI_UI/ValueField.h
+        CLI_UI/Types.cpp
+)
 
 #preprocessor definitions
 add_compile_definitions(__LINUX__)
