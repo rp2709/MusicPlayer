@@ -3,6 +3,12 @@
 #include <limits>
 #include <iostream>
 
+Buffer adapt(const Buffer& origin, const Settings& originSettings, const Settings& resultSettings){
+  if(originSettings.rate != resultSettings.rate)
+    return changeSampleRate(origin,originSettings.rate,resultSettings.rate);
+  return origin;
+}
+
 RealBuffer adapt(const Buffer& origin, const Settings& originSettings){
   RealBuffer result;
   result.reserve(origin.size() / originSettings.channels);

@@ -4,6 +4,8 @@
 #include "Types.h"
 #include "Buffer.h"
 
+Buffer adapt(const Buffer& origin, const Settings& originSettings, const Settings& resultSettings);
+
 RealBuffer adapt(const Buffer& origin, const Settings& originSettings);
 
 Buffer adapt(const RealBuffer& origin,Frequency sampleRate,SampleType resultFormat);
