@@ -37,7 +37,7 @@ class CLI_UI {
  public:
   template<UI_ELEMENTS elementType,typename ObjectPointer>
   void addElement(ObjectPointer ptr);
-  ~CLI_UI();
+  ~CLI_UI() = default;
   void run();
 
 };

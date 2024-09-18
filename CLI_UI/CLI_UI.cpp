@@ -92,15 +92,3 @@ void CLI_UI::enter() {
       break;
   }
 }
-
-CLI_UI::~CLI_UI() {
-  for(auto& ptr : fields){
-    delete ptr.get();
-  }
-  for(auto& ptr : buttons){
-    delete ptr.get();
-  }
-  for(auto& ptr : barGraphs){
-    delete ptr.get();
-  }
-}
