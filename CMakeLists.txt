@@ -48,9 +48,24 @@ add_executable(${PROJECT_NAME} main.cpp
 target_link_libraries(${PROJECT_NAME} ${ALSA_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} SoundBasis SoundDevice SoundFiles)
 
+#create CLI_UI library
+add_library(CLI_UI
+        CLI_UI/CLI_UI.cpp
+        CLI_UI/CLI_UI.h
+        CLI_UI/BarGraph.h
+        CLI_UI/Types.h
+        CLI_UI/Button.h
+        CLI_UI/ValueField.h
+        CLI_UI/Types.cpp
+)
+
 #preprocessor definitions
 add_compile_definitions(__LINUX__)
 
 #debug and test target
 add_executable(UnitTests unitTestMain.cpp)
 target_link_libraries(UnitTests SoundBasis SoundDevice ${ALSA_LIBRARIES} SoundFiles)
+
+#create a test executable to debug CLI_UI lib
+add_executable(CLI_UI_TEST CLI_UI/libTestMain.cpp)
+target_link_libraries(CLI_UI_TEST CLI_UI)
