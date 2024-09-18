@@ -16,6 +16,8 @@ add_library(SoundBasis
         SoundBasis/Buffer.h
         SoundBasis/Adapter.cpp
         SoundBasis/Adapter.h
+        SoundBasis/FourrierTransform.cpp
+        SoundBasis/FourrierTransform.h
 )
 
 #create SoundDevice lib
@@ -59,6 +61,10 @@ add_library(CLI_UI
 
 #preprocessor definitions
 add_compile_definitions(__LINUX__)
+
+#debug and test target
+add_executable(UnitTests unitTestMain.cpp)
+target_link_libraries(UnitTests SoundBasis SoundDevice ${ALSA_LIBRARIES} SoundFiles)
 
 #create a test executable to debug CLI_UI lib
 add_executable(CLI_UI_TEST CLI_UI/libTestMain.cpp)

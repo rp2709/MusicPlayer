@@ -2,6 +2,7 @@
 #define WAVE_PLAYER__TYPES_H_
 
 #include <vector>
+#include <complex>
 
 enum class SampleType{S8,S16,S20,S24};
 using Sample8 = signed char;
@@ -20,5 +21,17 @@ struct Settings{
 
 using Time = double;
 
+using Real = double;
+using Complex = std::complex<Real>;
+using RealBuffer = std::vector<Real>;
+using Frequency = Real;
+
+struct PeriodicWave{
+  Frequency frequency;
+  Real amplitude;
+  Real phase;
+};
+
+using Spectrum = std::vector<PeriodicWave>;
 
 #endif //WAVE_PLAYER__TYPES_H_
