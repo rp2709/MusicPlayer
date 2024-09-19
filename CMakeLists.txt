@@ -37,17 +37,6 @@ add_library(SoundFiles
 )
 target_link_libraries(SoundFiles SoundBasis)
 
-#create exec target
-add_executable(${PROJECT_NAME} main.cpp
-        MusicPlayer/MusicPlayer.cpp
-        MusicPlayer/MusicPlayer.h
-        MusicPlayer/CLI_Interface.cpp
-        MusicPlayer/CLI_Interface.h
-)
-
-target_link_libraries(${PROJECT_NAME} ${ALSA_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} SoundBasis SoundDevice SoundFiles)
-
 #create CLI_UI library
 add_library(CLI_UI
         CLI_UI/CLI_UI.cpp
@@ -69,3 +58,12 @@ target_link_libraries(UnitTests SoundBasis SoundDevice ${ALSA_LIBRARIES} SoundFi
 #create a test executable to debug CLI_UI lib
 add_executable(CLI_UI_TEST CLI_UI/libTestMain.cpp)
 target_link_libraries(CLI_UI_TEST CLI_UI)
+
+#create exec target
+add_executable(${PROJECT_NAME} main.cpp
+        MusicPlayer/MusicPlayer.cpp
+        MusicPlayer/MusicPlayer.h
+)
+
+target_link_libraries(${PROJECT_NAME} ${ALSA_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} SoundBasis SoundDevice SoundFiles CLI_UI)
