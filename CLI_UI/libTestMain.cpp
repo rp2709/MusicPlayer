@@ -16,14 +16,16 @@ class Foo{
   }
 };
 
-int main(){
-  CLI_UI ui;
-
+int main(int argc, char* argv[]){
+  CLI_UI ui("Main menu");
+  CLI_UI sub("Sub menu");
   Foo thing(1);
 
   ui.addElement<UI_ELEMENTS::BUTTON>(new Button("Power",thing,&Foo::m1,&Foo::m2));
   ui.addElement<UI_ELEMENTS::FIELD>(new ValueField("Time",thing,&Foo::getTime,"s"));
   ui.addElement<UI_ELEMENTS::BAR_GRAPH>(new BarGraph(thing,&Foo::getdata));
+
+  ui.addElement<UI_ELEMENTS::CLI_UI_INSTANCE>(&sub);
 
   ui.run();
 

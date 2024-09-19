@@ -38,6 +38,8 @@ void CLI_UI::run() {
 void CLI_UI::update() {
   using std::cout;
   clear();
+  if(not name.empty())
+    cout << name << '\n';
   for (size_t i = 0; i < drawOrder.size(); ++i) {
     auto[type,index] = drawOrder[i];
     switch (type) {
@@ -48,6 +50,8 @@ void CLI_UI::update() {
         break;
       case UI_ELEMENTS::FIELD:fields.at(index)->update();
         cout << *(ElementBase*)fields.at(index).get();
+        break;
+      case UI_ELEMENTS::CLI_UI_INSTANCE:cout << *(ElementBase*)subDir.at(index);
         break;
     }
     if(i == selectedElement)cout << " <-";
@@ -90,5 +94,13 @@ void CLI_UI::enter() {
       break;
     case UI_ELEMENTS::FIELD:
       break;
+    case UI_ELEMENTS::CLI_UI_INSTANCE:subDir.at(index)->run();
+      break;
   }
+}
+
+CLI_UI::CLI_UI(std::string name):name(std::move(name)){}
+
+std::string CLI_UI::print() const {
+  return '>' +name;
 }

@@ -37,7 +37,7 @@ add_library(SoundFiles
 )
 target_link_libraries(SoundFiles SoundBasis)
 
-#create CLI_UI library
+#create CLI_UI_INSTANCE library
 add_library(CLI_UI
         CLI_UI/CLI_UI.cpp
         CLI_UI/CLI_UI.h
@@ -55,7 +55,7 @@ add_compile_definitions(__LINUX__)
 add_executable(UnitTests unitTestMain.cpp)
 target_link_libraries(UnitTests SoundBasis SoundDevice ${ALSA_LIBRARIES} SoundFiles)
 
-#create a test executable to debug CLI_UI lib
+#create a test executable to debug CLI_UI_INSTANCE lib
 add_executable(CLI_UI_TEST CLI_UI/libTestMain.cpp)
 target_link_libraries(CLI_UI_TEST CLI_UI)
 
