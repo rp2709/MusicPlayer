@@ -48,11 +48,12 @@ void CLI_UI::update() {
         break;
       case UI_ELEMENTS::BUTTON:cout << *(ElementBase*)buttons.at(index).get();
         break;
-      case UI_ELEMENTS::FIELD:fields.at(index)->update();
+      case UI_ELEMENTS::VALUE_DISPLAY:fields.at(index)->update();
         cout << *(ElementBase*)fields.at(index).get();
         break;
       case UI_ELEMENTS::CLI_UI_INSTANCE:cout << *(ElementBase*)subDir.at(index);
         break;
+      case UI_ELEMENTS::TEXT_FIELD:cout << *(ElementBase*)textFields.at(index).get();
     }
     if(i == selectedElement)cout << " <-";
     cout << '\n';
@@ -92,9 +93,11 @@ void CLI_UI::enter() {
       break;
     case UI_ELEMENTS::BUTTON:buttons.at(index)->toggle();
       break;
-    case UI_ELEMENTS::FIELD:
+    case UI_ELEMENTS::VALUE_DISPLAY:
       break;
     case UI_ELEMENTS::CLI_UI_INSTANCE:subDir.at(index)->run();
+      break;
+    case UI_ELEMENTS::TEXT_FIELD:textFields.at(index)->getInput();
       break;
   }
 }

@@ -14,7 +14,7 @@ int main (){
   ui.addElement<UI_ELEMENTS::BUTTON>(
       new Button("Stop",player,&MusicPlayer::stop,&MusicPlayer::stop,"",""));
 
-  ui.addElement<UI_ELEMENTS::FIELD>(
+  ui.addElement<UI_ELEMENTS::VALUE_DISPLAY>(
       new ValueField("Time",player,&MusicPlayer::getTime));
 
   player.openFile("demo.wav");

@@ -46,6 +46,7 @@ add_library(CLI_UI
         CLI_UI/Button.h
         CLI_UI/ValueField.h
         CLI_UI/Types.cpp
+        CLI_UI/TextField.h
 )
 
 #preprocessor definitions
